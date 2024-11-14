@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+
+  position: relative;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+
+  border: 1px solid #bdc3c7;
+  border-radius: 5px;
+}
+
+.erase_button {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 10px;
+}

@@ -1,0 +1,27 @@
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card ul {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.card li {
+  font-weight: bold;
+  font-size: 14px;
+  border-right: 1px solid gray;
+  padding-right: 15px;
+}
+
+.card li:last-child {
+  border-right: none;
+}
+
+.card span {
+  color: rgb(23, 121, 192);
+  text-decoration: underline rgb(23, 121, 192);
+}

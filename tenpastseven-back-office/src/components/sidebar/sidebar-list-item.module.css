@@ -1,0 +1,22 @@
+.nav_a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+
+  padding: 15px 20px;
+}
+
+.nav_active {
+  background-color: #1a1a40;
+}
+
+.nav_right_wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+
+  gap: 10px;
+}
