@@ -6,8 +6,10 @@ type Props = React.DetailedHTMLProps<
 >;
 
 export default function Select(props: Props) {
-  const { children, className } = props;
+  const { children, className, ...filterProps } = props;
   return (
-    <select className={`${styles.select} ${className}`}>{children}</select>
+    <select className={`${styles.select} ${className}`} {...filterProps}>
+      {children}
+    </select>
   );
 }

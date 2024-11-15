@@ -10,7 +10,7 @@ interface Props
     HTMLInputElement
   > {
   label?: string;
-  eraseButton?: boolean;
+  eraseButton?: () => void;
   containerClassName?: string | undefined;
 }
 
@@ -36,9 +36,7 @@ export default function Input(props: Props) {
         <SvgButton
           name={"x-mark"}
           onClick={() => {
-            if (inputRef && inputRef.current) {
-              inputRef.current.value = "";
-            }
+            eraseButton();
           }}
           className={styles.erase_button}
         />

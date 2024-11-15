@@ -7,7 +7,7 @@ import styles from "./ui.module.css";
 import QuantitySection from "./quantity-section";
 import SearchSection from "./search-section";
 import { useQuery } from "@tanstack/react-query";
-import { FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { toast } from "react-toastify";
 import ProductListSection from "./product-list-section";
 
@@ -42,6 +42,14 @@ export default function ProductListUI({
     },
   });
 
+  const onChangeSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+  };
+
+  const onEraseSearch = () => {
+    setSearch("");
+  };
+
   const onSubmitSearch = (e: FormEvent) => {
     e.preventDefault();
     refetch();
@@ -58,7 +66,8 @@ export default function ProductListUI({
           />
           <SearchSection
             search={search}
-            setSearch={setSearch}
+            onChangeSearch={onChangeSearch}
+            onEraseSearch={onEraseSearch}
             onSubmitSearch={onSubmitSearch}
             isLoading={isLoading}
           />

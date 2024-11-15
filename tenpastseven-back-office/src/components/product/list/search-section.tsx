@@ -5,19 +5,21 @@ import styles from "./search-section.module.css";
 import Card from "@/components/atoms/card";
 import Input from "@/components/atoms/input";
 import MenuTitle from "@/components/atoms/menu-title";
-import { Dispatch, FormEventHandler, SetStateAction } from "react";
+import { ChangeEventHandler, FormEventHandler } from "react";
 import Button from "@/components/atoms/button";
 
 interface Props {
   search: string;
-  setSearch: Dispatch<SetStateAction<string>>;
+  onChangeSearch: ChangeEventHandler<HTMLInputElement> | undefined;
+  onEraseSearch: () => void;
   onSubmitSearch: FormEventHandler<HTMLFormElement>;
   isLoading: boolean;
 }
 
 export default function SearchSection({
   search,
-  setSearch,
+  onChangeSearch,
+  onEraseSearch,
   onSubmitSearch,
   isLoading,
 }: Props) {
@@ -29,10 +31,10 @@ export default function SearchSection({
           <Input
             placeholder="상품 이름을 입력해주세요."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={onChangeSearch}
             containerClassName={styles.input_container}
             className={styles.search_input}
-            eraseButton
+            eraseButton={onEraseSearch}
           />
           <Button
             style={{ minWidth: "max-content" }}

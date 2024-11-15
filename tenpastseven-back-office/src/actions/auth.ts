@@ -74,5 +74,5 @@ export async function signUp() {
     return { error: error.message };
   }
 
-  return { message: "회원가입 성공!!" };
+  return { data: "회원가입 성공!!" };
 }
