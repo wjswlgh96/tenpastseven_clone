@@ -15,7 +15,7 @@ export type Database = {
           description: string | null
           detail_images: string[] | null
           id: number
-          is_sale: boolean | null
+          is_sale: boolean
           main_images: Json | null
           name: string
           options: Json | null
@@ -28,7 +28,7 @@ export type Database = {
           description?: string | null
           detail_images?: string[] | null
           id?: number
-          is_sale?: boolean | null
+          is_sale?: boolean
           main_images?: Json | null
           name: string
           options?: Json | null
@@ -41,7 +41,7 @@ export type Database = {
           description?: string | null
           detail_images?: string[] | null
           id?: number
-          is_sale?: boolean | null
+          is_sale?: boolean
           main_images?: Json | null
           name?: string
           options?: Json | null

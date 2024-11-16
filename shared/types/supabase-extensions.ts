@@ -6,7 +6,7 @@ export type Database = GenerateDatabase & {
     Tables: {
       products: {
         Row: {
-          images: ProductImage | null;
+          main_images: ProductImage | null;
           options: ProductionOption[] | null;
         };
       };
