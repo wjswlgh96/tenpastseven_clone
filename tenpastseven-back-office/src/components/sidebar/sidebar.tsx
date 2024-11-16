@@ -10,6 +10,7 @@ import Svg from "../_atoms/svg";
 import SvgButton from "../_atoms/svg-button";
 import { sidebarList } from "@/constant/sidebar";
 import SidebarListItem from "./sidebar-list-item";
+import { useRouter } from "next/navigation";
 
 const sidebarVariants: Variants = {
   initial: {
@@ -21,6 +22,7 @@ const sidebarVariants: Variants = {
 };
 
 export default function SideBar() {
+  const router = useRouter();
   const [isSidebar, setIsSidebar] = useRecoilState(isSidebarState);
 
   return (
@@ -34,7 +36,11 @@ export default function SideBar() {
       {isSidebar ? (
         <>
           <div className={styles.header_wrap}>
-            <Svg className={styles.logo} name="logo" />
+            <Svg
+              className={styles.logo}
+              name="logo"
+              onClick={() => router.replace("/")}
+            />
             <SvgButton
               className={styles.svg_wrap}
               name={isSidebar ? "angles-left" : "angles-right"}

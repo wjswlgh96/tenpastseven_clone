@@ -25,25 +25,12 @@ export default function ProductListUI() {
   );
   const [sortOrder, setSortOrder] = useState<string>("created_at_a");
 
-  const { data: lengthData, isLoading: lengthLoading } = useQuery({
-    queryKey: ["products"],
-    queryFn: async () => {
-      const { products, error } = await getAllProducts();
-      if (error) {
-        toast.error(error);
-        return;
-      }
-
-      return products;
-    },
-  });
-
   const {
     data: products,
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["searchProduct", sortOrder, isSaleSelect],
+    queryKey: ["products", "search", sortOrder, isSaleSelect],
     queryFn: async () => {
       const isAscending = sortOrder.slice(-1) === "a" ? true : false;
       const sortKey = sortOrder.slice(0, -2);
@@ -89,17 +76,10 @@ export default function ProductListUI() {
 
   return (
     <>
-      {lengthLoading && <LoadingScreen />}
-      {products && lengthData && (
+      {isLoading && <LoadingScreen />}
+      {products && (
         <div className={styles.section_wrap}>
-          <QuantitySection
-            allLength={lengthData.length}
-            saleLength={lengthData.filter((product) => product.is_sale).length}
-            noneSaleLength={
-              lengthData.filter((product) => !product.is_sale).length
-            }
-            setIsSaleSelect={setIsSaleSelect}
-          />
+          <QuantitySection setIsSaleSelect={setIsSaleSelect} />
           <SearchSection
             search={search}
             onChangeSearch={onChangeSearch}

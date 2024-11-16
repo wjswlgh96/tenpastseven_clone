@@ -25,6 +25,12 @@
 .logo {
   flex: 0.6;
   color: white;
+
+  cursor: pointer;
+}
+
+.logo:hover {
+  opacity: 0.6;
 }
 
 .svg_wrap {

@@ -33,7 +33,7 @@ export default function ProductListItem({
       const interval = setInterval(() => {
         if (popup.closed) {
           clearInterval(interval);
-          queryClient.invalidateQueries({ queryKey: ["searchProduct"] });
+          queryClient.invalidateQueries({ queryKey: ["products"] });
         }
       }, 100);
     }

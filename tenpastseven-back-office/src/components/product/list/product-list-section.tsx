@@ -56,7 +56,9 @@ export default function ProductListSection({
       setCheckedItems([]);
 
       toast.success(data);
-      queryClient.invalidateQueries({ queryKey: ["searchProduct"] });
+      queryClient.invalidateQueries({
+        queryKey: ["products"],
+      });
     },
   });
 
@@ -78,7 +80,9 @@ export default function ProductListSection({
       setCheckedItems([]);
 
       toast.success(data);
-      queryClient.invalidateQueries({ queryKey: ["searchProduct"] });
+      queryClient.invalidateQueries({
+        queryKey: ["products"],
+      });
     },
   });
 
@@ -99,7 +103,9 @@ export default function ProductListSection({
       if (data) {
         setCheckedItems([]);
         toast.success(data);
-        queryClient.invalidateQueries({ queryKey: ["searchProduct"] });
+        queryClient.invalidateQueries({
+          queryKey: ["products"],
+        });
       }
     },
   });
