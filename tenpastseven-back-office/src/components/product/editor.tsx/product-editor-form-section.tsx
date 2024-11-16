@@ -20,7 +20,7 @@ type ProductState = {
   name: string;
   description: string;
   price: number;
-  options: ProductionOption[] | null;
+  options: ProductionOption[];
   main_images: ProductImage | null;
   detail_images: string[] | null;
   is_sale: boolean;
@@ -32,7 +32,7 @@ const initialState: ProductState = {
   name: "",
   description: "",
   price: 0,
-  options: null,
+  options: [{ size: "S", stock: 0 }],
   main_images: null,
   detail_images: null,
   is_sale: false,

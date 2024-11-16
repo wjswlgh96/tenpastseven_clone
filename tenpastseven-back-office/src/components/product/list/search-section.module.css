@@ -11,5 +11,6 @@
 }
 
 .search_input {
-  max-width: 400px;
+  width: 400px !important;
+  height: 35px !important;
 }

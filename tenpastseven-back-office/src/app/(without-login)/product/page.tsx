@@ -9,7 +9,7 @@ export default async function Product() {
 
   const isSale = products?.filter((product) => product.is_sale);
   const soldOut = products?.filter((product) =>
-    product.options?.every((option) => option.stock === 0)
+    product.options.every((option) => option.stock === 0)
   );
 
   return (

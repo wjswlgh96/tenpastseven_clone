@@ -7,7 +7,7 @@ export type Database = GenerateDatabase & {
       products: {
         Row: {
           main_images: ProductImage | null;
-          options: ProductionOption[] | null;
+          options: ProductionOption[];
         };
       };
     };
