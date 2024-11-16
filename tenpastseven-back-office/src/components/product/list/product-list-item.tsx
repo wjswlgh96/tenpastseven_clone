@@ -11,12 +11,14 @@ interface Props {
   isChecked: boolean;
   handleCheckboxChange: (string) => void;
   product: ProductTypes;
+  index: number;
 }
 
 export default function ProductListItem({
   isChecked,
   handleCheckboxChange,
   product,
+  index,
 }: Props) {
   const queryClient = useQueryClient();
 
@@ -46,7 +48,7 @@ export default function ProductListItem({
           onChange={() => handleCheckboxChange(String(product.id))}
         />
       </div>
-      <div>{product.id}</div>
+      <div>{index}</div>
       <div className={styles.product_info}>
         <div>
           <Image

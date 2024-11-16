@@ -131,6 +131,10 @@ export default function ProductEditorFormSection({ id }: { id?: string }) {
           </div>
         </div>
 
+        <div className={styles.required_wrap}>
+          <span>*</span> 필수입력사항
+        </div>
+
         <Input
           type="checkbox"
           label="판매하기"

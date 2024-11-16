@@ -12,7 +12,7 @@ export default function Spinner({ size, borderWidth }: Props) {
   return (
     <motion.div
       animate={{ rotate: 360 }}
-      transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+      transition={{ repeat: Infinity, duration: 0.5, ease: "linear" }}
       className={styles.spinner}
       style={{
         width: size && size,

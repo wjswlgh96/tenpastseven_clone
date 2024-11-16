@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
 
-  gap: 3rem;
+  gap: 2rem;
 }
 
 .title_wrap {
@@ -17,6 +17,19 @@
   gap: 1rem;
 }
 
+.required_wrap {
+  width: 310px;
+  display: flex;
+  justify-content: flex-end;
+  font-size: 14px;
+}
+
+.required_wrap span {
+  color: red;
+  font-size: 16px;
+  padding-right: 0.3rem;
+}
+
 .input_label_wrap {
   display: flex;
   flex-direction: row !important;
@@ -25,11 +38,11 @@
 }
 
 .input_label_wrap input {
-  max-width: 250px;
+  width: 250px;
 }
 
 .input_label_wrap input[type="checkbox"] {
-  max-width: max-content;
+  width: 14px;
 }
 
 .textarea_label_wrap {

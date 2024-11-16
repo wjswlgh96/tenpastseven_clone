@@ -226,12 +226,13 @@ export default function ProductListSection({
           <div>판매상태</div>
         </div>
         {products && products.length > 0 ? (
-          products.map((product) => (
+          products.map((product, idx) => (
             <ProductListItem
               key={product.id}
               isChecked={checkedItems.includes(String(product.id))}
               handleCheckboxChange={handleCheckboxChange}
               product={product}
+              index={idx + 1}
             />
           ))
         ) : (

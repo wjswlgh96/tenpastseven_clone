@@ -1,6 +1,6 @@
 "use client";
 
-import { getOptionalProducts } from "@/actions/products";
+import { getAllProducts, getOptionalProducts } from "@/actions/products";
 
 import styles from "./ui.module.css";
 
@@ -11,6 +11,7 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { toast } from "react-toastify";
 import ProductListSection from "./product-list-section";
 import { useSearchParams } from "next/navigation";
+import LoadingScreen from "@/components/_molecules/loading-screen";
 
 export type saleSelectType = "all" | "is_sale" | "none_sale";
 
@@ -23,6 +24,19 @@ export default function ProductListUI() {
     getQ ? getQ : "all"
   );
   const [sortOrder, setSortOrder] = useState<string>("created_at_a");
+
+  const { data: lengthData, isLoading: lengthLoading } = useQuery({
+    queryKey: ["products"],
+    queryFn: async () => {
+      const { products, error } = await getAllProducts();
+      if (error) {
+        toast.error(error);
+        return;
+      }
+
+      return products;
+    },
+  });
 
   const {
     data: products,
@@ -75,13 +89,14 @@ export default function ProductListUI() {
 
   return (
     <>
-      {products && (
+      {lengthLoading && <LoadingScreen />}
+      {products && lengthData && (
         <div className={styles.section_wrap}>
           <QuantitySection
-            allLength={products.length}
-            saleLength={products.filter((product) => product.is_sale).length}
+            allLength={lengthData.length}
+            saleLength={lengthData.filter((product) => product.is_sale).length}
             noneSaleLength={
-              products.filter((product) => !product.is_sale).length
+              lengthData.filter((product) => !product.is_sale).length
             }
             setIsSaleSelect={setIsSaleSelect}
           />
