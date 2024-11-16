@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "@/styles/atoms/button.module.css";
+import styles from "@/styles/_atoms/button.module.css";
 import { HTMLMotionProps, motion, Variants } from "motion/react";
 import Spinner from "./spinner";
 

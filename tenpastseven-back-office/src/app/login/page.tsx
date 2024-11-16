@@ -3,9 +3,9 @@
 import { FormEvent, useState } from "react";
 import styles from "./page.module.css";
 
-import Input from "@/components/atoms/input";
-import Button from "@/components/atoms/button";
-import Svg from "@/components/atoms/svg";
+import Input from "@/components/_atoms/input";
+import Button from "@/components/_atoms/button";
+import Svg from "@/components/_atoms/svg";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { login } from "@/actions/auth";

@@ -8,6 +8,12 @@
   border-bottom: 1px solid rgb(150, 150, 150);
 }
 
+.select_wrap {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
 .top_wrap span {
   color: rgb(23, 121, 192);
   font-weight: bold;

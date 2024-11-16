@@ -3,7 +3,7 @@ import Svg from "./svg";
 import { SvgList } from "@shared/types";
 import { motion, MotionStyle } from "motion/react";
 
-import styles from "@/styles/atoms/svg-button.module.css";
+import styles from "@/styles/_atoms/svg-button.module.css";
 
 interface Props {
   name: SvgList;

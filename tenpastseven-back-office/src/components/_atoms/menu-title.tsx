@@ -1,4 +1,4 @@
-import styles from "@/styles/atoms/menu-title.module.css";
+import styles from "@/styles/_atoms/menu-title.module.css";
 
 type Props = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLHeadingElement>,

@@ -5,7 +5,7 @@ import styles from "./sidebar-list-item.module.css";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import Svg from "../atoms/svg";
+import Svg from "../_atoms/svg";
 import { SidebarListType } from "@/types/sidebar";
 
 interface Props {
@@ -20,7 +20,7 @@ export default function SidebarListItem({ sidebar }: Props) {
       <Link
         href={sidebar.href}
         className={`${styles.nav_a} ${
-          pathname === sidebar.href ? styles.nav_active : ""
+          pathname.startsWith(sidebar.href) ? styles.nav_active : ""
         }`}
       >
         <Svg name={sidebar.icon_name} />

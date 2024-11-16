@@ -1,7 +1,7 @@
 "use client";
 
 import { logout } from "@/actions/auth";
-import Svg from "../atoms/svg";
+import Svg from "../_atoms/svg";
 
 export default function LogOutButton() {
   const onClick = async () => {

@@ -1,10 +1,10 @@
-"use client";
-
-import { userState } from "@/utils/recoil/atoms";
-import { useRecoilValue } from "recoil";
+import Svg from "@/components/_atoms/svg";
+import styles from "./page.module.css";
 
 export default function Home() {
-  const user = useRecoilValue(userState);
-
-  return <div>안뇽하세용?? {user?.username}</div>;
+  return (
+    <div className={styles.container}>
+      <Svg className={styles.logo} name="logo" />
+    </div>
+  );
 }

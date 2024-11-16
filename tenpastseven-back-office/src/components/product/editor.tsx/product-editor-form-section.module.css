@@ -1,0 +1,38 @@
+.form {
+  display: flex;
+  flex-direction: column;
+
+  gap: 3rem;
+}
+
+.title_wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title_button_wrap {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.input_label_wrap {
+  display: flex;
+  flex-direction: row !important;
+
+  align-items: center;
+}
+
+.input_label_wrap input {
+  max-width: 250px;
+}
+
+.input_label_wrap input[type="checkbox"] {
+  max-width: max-content;
+}
+
+.textarea_label_wrap {
+  display: flex;
+  flex-direction: row !important;
+}

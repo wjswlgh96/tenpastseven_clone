@@ -4,29 +4,35 @@ import styles from "./product-list-section.module.css";
 
 import { ProductTypes } from "@shared/types";
 
-import Card from "@/components/atoms/card";
-import MenuTitle from "@/components/atoms/menu-title";
+import Card from "@/components/_atoms/card";
+import MenuTitle from "@/components/_atoms/menu-title";
 import { Dispatch, SetStateAction, useState } from "react";
-import Select from "@/components/atoms/select";
-import Button from "@/components/atoms/button";
+import Select from "@/components/_atoms/select";
+import Button from "@/components/_atoms/button";
 import ProductListItem from "./product-list-item";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   deleteSelectedProduts,
-  updateSelectedProducts,
+  updateSelectedProductsIsSaleState,
 } from "@/actions/products";
 import { toast } from "react-toastify";
+import { saleSelectType } from "./ui";
+import Link from "next/link";
 
 interface Props {
   products: ProductTypes[];
   sortOrder: string;
   setSortOrder: Dispatch<SetStateAction<string>>;
+  isSaleSelect: saleSelectType;
+  setIsSaleSelect: Dispatch<SetStateAction<saleSelectType>>;
 }
 
 export default function ProductListSection({
   products,
   sortOrder,
   setSortOrder,
+  isSaleSelect,
+  setIsSaleSelect,
 }: Props) {
   const queryClient = useQueryClient();
 
@@ -34,7 +40,7 @@ export default function ProductListSection({
 
   const updatedIsSaleTrueMutation = useMutation({
     mutationFn: async () => {
-      const { data, error } = await updateSelectedProducts(
+      const { data, error } = await updateSelectedProductsIsSaleState(
         checkedItems.map(Number),
         { is_sale: true }
       );
@@ -56,7 +62,7 @@ export default function ProductListSection({
 
   const updatedIsSaleFalseMutation = useMutation({
     mutationFn: async () => {
-      const { data, error } = await updateSelectedProducts(
+      const { data, error } = await updateSelectedProductsIsSaleState(
         checkedItems.map(Number),
         { is_sale: false }
       );
@@ -141,14 +147,39 @@ export default function ProductListSection({
           <p>
             총 <span>{products.length}</span>개
           </p>
-          <Select
-            value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value)}
-          >
-            <option value="created_at">등록일 순</option>
-            <option value="name">상품명 순</option>
-            <option value="price">판매가 순</option>
-          </Select>
+
+          <div className={styles.select_wrap}>
+            <Select
+              value={isSaleSelect}
+              onChange={(e) =>
+                setIsSaleSelect(e.target.value as saleSelectType)
+              }
+            >
+              <option value="all">전체</option>
+              <option value="empty" disabled>
+                ----------------
+              </option>
+              <option value="is_sale">판매중</option>
+              <option value="none_sale">판매안함</option>
+            </Select>
+            <Select
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value)}
+            >
+              <option value="created_at_a">등록일 순</option>
+              <option value="created_at_d">등록일 역순</option>
+              <option value="empty" disabled>
+                ----------------
+              </option>
+              <option value="name_a">상품명 순</option>
+              <option value="name_d">상품명 역순</option>
+              <option value="empty" disabled>
+                ----------------
+              </option>
+              <option value="price_a">판매가 순</option>
+              <option value="price_d">판매가 역순</option>
+            </Select>
+          </div>
         </div>
         <div className={styles.button_list_wrap}>
           <div className={styles.button_left_wrap}>
@@ -175,7 +206,9 @@ export default function ProductListSection({
             </Button>
           </div>
           <div>
-            <Button>상품등록</Button>
+            <Button>
+              <Link href="/product/editor">상품등록</Link>
+            </Button>
           </div>
         </div>
         <div className={styles.table_header_wrap}>

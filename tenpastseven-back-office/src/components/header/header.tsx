@@ -4,7 +4,7 @@ import styles from "./header.module.css";
 
 import { useRecoilValue } from "recoil";
 import { userState } from "@/utils/recoil/atoms";
-import SvgButton from "../atoms/svg-button";
+import SvgButton from "../_atoms/svg-button";
 import { logout } from "@/actions/auth";
 import { toast } from "react-toastify";
 import { useMutation } from "@tanstack/react-query";

@@ -2,11 +2,11 @@
 
 import styles from "./search-section.module.css";
 
-import Card from "@/components/atoms/card";
-import Input from "@/components/atoms/input";
-import MenuTitle from "@/components/atoms/menu-title";
+import Card from "@/components/_atoms/card";
+import Input from "@/components/_atoms/input";
+import MenuTitle from "@/components/_atoms/menu-title";
 import { ChangeEventHandler, FormEventHandler } from "react";
-import Button from "@/components/atoms/button";
+import Button from "@/components/_atoms/button";
 
 interface Props {
   search: string;
@@ -34,7 +34,7 @@ export default function SearchSection({
             onChange={onChangeSearch}
             containerClassName={styles.input_container}
             className={styles.search_input}
-            eraseButton={onEraseSearch}
+            handleEraseButton={onEraseSearch}
           />
           <Button
             style={{ minWidth: "max-content" }}

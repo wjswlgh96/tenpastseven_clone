@@ -1,8 +1,9 @@
 "use client";
 
-import styles from "@/styles/atoms/input.module.css";
+import styles from "@/styles/_atoms/input.module.css";
 import SvgButton from "./svg-button";
-import { useRef } from "react";
+
+import { motion } from "motion/react";
 
 interface Props
   extends React.DetailedHTMLProps<
@@ -10,33 +11,44 @@ interface Props
     HTMLInputElement
   > {
   label?: string;
-  eraseButton?: () => void;
+  handleEraseButton?: () => void;
   containerClassName?: string | undefined;
 }
 
 export default function Input(props: Props) {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const { label, className, containerClassName, eraseButton, ...filterProps } =
-    props;
+  const {
+    label,
+    className,
+    containerClassName,
+    handleEraseButton,
+    ...filterProps
+  } = props;
 
   return (
     <div className={`${styles.container} ${containerClassName}`}>
       {label && (
-        <label htmlFor={label} className={styles.label}>
+        <motion.label
+          htmlFor={label}
+          className={styles.label}
+          whileHover={{ opacity: 0.6 }}
+        >
           {label}
-        </label>
+          {filterProps.required && (
+            <span className={styles.label_required}>*</span>
+          )}
+        </motion.label>
       )}
+
       <input
-        ref={inputRef}
         className={`${styles.input} ${className}`}
         id={label}
         {...filterProps}
       />
-      {eraseButton && (
+      {handleEraseButton && (
         <SvgButton
           name={"x-mark"}
           onClick={() => {
-            eraseButton();
+            handleEraseButton();
           }}
           className={styles.erase_button}
         />

@@ -20,12 +20,12 @@ export default function RootLayout({
   return (
     <html lang="ko-KR">
       <body className={`${pretendard.variable}`} suppressHydrationWarning>
-        <TanStackQueryProvider>
-          <RecoilProvider>
+        <RecoilProvider>
+          <TanStackQueryProvider>
             <ToastProvider />
             {children}
-          </RecoilProvider>
-        </TanStackQueryProvider>
+          </TanStackQueryProvider>
+        </RecoilProvider>
       </body>
     </html>
   );

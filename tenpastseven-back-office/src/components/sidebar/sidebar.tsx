@@ -6,8 +6,8 @@ import { useRecoilState } from "recoil";
 import { motion, Variants } from "motion/react";
 import { isSidebarState } from "@/utils/recoil/atoms";
 
-import Svg from "../atoms/svg";
-import SvgButton from "../atoms/svg-button";
+import Svg from "../_atoms/svg";
+import SvgButton from "../_atoms/svg-button";
 import { sidebarList } from "@/constant/sidebar";
 import SidebarListItem from "./sidebar-list-item";
 

@@ -1,4 +1,4 @@
-import styles from "@/styles/atoms/subtitle.module.css";
+import styles from "@/styles/_atoms/subtitle.module.css";
 
 type Props = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLHeadingElement>,

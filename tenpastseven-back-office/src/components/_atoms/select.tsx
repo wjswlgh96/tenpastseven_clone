@@ -1,4 +1,4 @@
-import styles from "@/styles/atoms/select.module.css";
+import styles from "@/styles/_atoms/select.module.css";
 
 type Props = React.DetailedHTMLProps<
   React.SelectHTMLAttributes<HTMLSelectElement>,

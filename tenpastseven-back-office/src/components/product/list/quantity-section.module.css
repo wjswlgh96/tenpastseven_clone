@@ -24,4 +24,15 @@
 .card span {
   color: rgb(23, 121, 192);
   text-decoration: underline rgb(23, 121, 192);
+
+  cursor: pointer;
+}
+
+.red_text {
+  color: rgb(215, 25, 82) !important;
+  text-decoration: underline rgb(215, 25, 82) !important;
+}
+
+.card span:hover {
+  opacity: 0.7;
 }

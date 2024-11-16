@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "@/styles/atoms/card.module.css";
+import styles from "@/styles/_atoms/card.module.css";
 
 type Props = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,

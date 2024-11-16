@@ -8,21 +8,28 @@
 }
 
 .label {
+  min-width: max-content;
+
   font-size: 14px;
   font-weight: 500;
+
+  cursor: pointer;
 }
 
-.input {
+.label_required {
+  margin-left: 0.3rem;
+
+  font-size: 16px;
+  color: red;
+}
+
+.textArea {
   width: 100%;
+  height: 250px;
   padding: 10px;
 
   border: 1px solid #bdc3c7;
   border-radius: 5px;
-}
 
-.erase_button {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 10px;
+  resize: none;
 }

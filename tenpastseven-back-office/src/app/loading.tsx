@@ -1,11 +1,5 @@
-import styles from "./loading.module.css";
-
-import Spinner from "@/components/atoms/spinner";
+import LoadingScreen from "@/components/_molecules/loading-screen";
 
 export default function Loading() {
-  return (
-    <div className={styles.overlay}>
-      <Spinner />
-    </div>
-  );
+  return <LoadingScreen />;
 }
