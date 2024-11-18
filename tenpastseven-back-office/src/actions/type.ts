@@ -1,4 +1,4 @@
-export type defaultResponseType = {
+export interface DefaultResponse {
   data: string | null;
   error: string | null;
-};
+}

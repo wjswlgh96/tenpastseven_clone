@@ -1,0 +1,81 @@
+.container {
+  width: 100%;
+  padding: 0 1.5rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+
+  gap: 2rem;
+}
+
+.title_wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title_button_wrap {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.required_wrap {
+  width: 310px;
+  display: flex;
+  justify-content: flex-end;
+  font-size: 14px;
+}
+
+.required_wrap span {
+  color: red;
+  font-size: 16px;
+  padding-right: 0.3rem;
+}
+
+.input_label_wrap {
+  display: flex;
+  flex-direction: row !important;
+
+  align-items: center;
+}
+
+.input_label_wrap input {
+  width: 250px;
+}
+
+.input_label_wrap input[type="checkbox"] {
+  width: 14px;
+}
+
+.textarea_label_wrap {
+  display: flex;
+}
+
+.options_wrap {
+  min-width: max-content;
+}
+
+.options_wrap_title {
+  font-size: 14px;
+  font-weight: 500;
+  padding-top: 1.5rem;
+  margin-bottom: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.select_option_wrap {
+  display: flex;
+  align-items: center;
+  gap: 100px;
+}
+
+.select_option_input {
+  width: 200px !important;
+}
+
+.select_option_input:disabled {
+  background-color: rgb(200, 200, 200);
+}

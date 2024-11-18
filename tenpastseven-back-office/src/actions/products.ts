@@ -1,19 +1,19 @@
 "use server";
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
-import { ProductTypes } from "@shared/types";
-import { defaultResponseType } from "./type";
+import { ProductType } from "@shared/types";
+import { DefaultResponse } from "./type";
 import {
   formatExistingProductData,
   formatNewProductData,
-} from "@/utils/func/format";
+} from "@/utils/functions/format";
 
-type getProductsResponse = {
-  products: ProductTypes[] | null;
+interface ProductsResponse {
+  products: ProductType[] | null;
   error: string | null;
-};
+}
 
-export async function getAllProducts(): Promise<getProductsResponse> {
+export async function getAllProducts(): Promise<ProductsResponse> {
   const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase.from("products").select("*");
 
@@ -47,7 +47,7 @@ export async function getOptionalProducts({
   search: string;
   isAscending: boolean;
   sortOrder: string;
-}): Promise<getProductsResponse> {
+}): Promise<ProductsResponse> {
   const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase
     .from("products")
@@ -62,11 +62,7 @@ export async function getOptionalProducts({
   return { products: data, error: null };
 }
 
-export async function upsertProducts({
-  data,
-}: {
-  data: Partial<ProductTypes>;
-}) {
+export async function upsertProducts({ data }: { data: Partial<ProductType> }) {
   const payload = data.id
     ? formatExistingProductData(data)
     : formatNewProductData(data);
@@ -82,31 +78,40 @@ export async function upsertProducts({
 }
 
 export async function updateSelectedProductsIsSaleState(
-  id_list: number[],
-  updateData: Partial<ProductTypes>
-): Promise<defaultResponseType> {
+  idList: number[],
+  updateData: Partial<ProductType>
+): Promise<DefaultResponse> {
   const supabase = await createServerSupabaseClient();
   const { error } = await supabase
     .from("products")
-    .update({ ...updateData, updated_at: new Date().toISOString() })
-    .in("id", id_list);
+    .update({
+      ...updateData,
+      updated_at: new Date().toISOString(),
+    })
+    .in("id", idList);
 
   if (error) {
     return { data: null, error: error.message };
   }
 
-  return { data: "판매상태가 성공적으로 업데이트 되었습니다", error: null };
+  return {
+    data: "판매상태가 성공적으로 업데이트 되었습니다",
+    error: null,
+  };
 }
 
-export async function deleteSelectedProduts(
-  id_list: number[]
-): Promise<defaultResponseType> {
+export async function deleteSelectedProducts(
+  idList: number[]
+): Promise<DefaultResponse> {
   const supabase = await createServerSupabaseClient();
-  const { error } = await supabase.from("products").delete().in("id", id_list);
+  const { error } = await supabase.from("products").delete().in("id", idList);
 
   if (error) {
     return { data: null, error: error.message };
   }
 
-  return { data: "삭제 성공!!", error: null };
+  return {
+    data: "선택한 상품이 성공적으로 삭제되었습니다",
+    error: null,
+  };
 }

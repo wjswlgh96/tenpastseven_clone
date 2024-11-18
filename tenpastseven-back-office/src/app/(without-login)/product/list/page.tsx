@@ -1,13 +1,5 @@
-import styles from "./page.module.css";
-
-import ProductListUI from "@/components/product/list/ui";
+import ProductListTemplate from "@/components/templates/product/list/product-list-template";
 
 export default async function ProductListPage() {
-  return (
-    <div className={styles.container}>
-      <div className={styles.wrapper}>
-        <ProductListUI />
-      </div>
-    </div>
-  );
+  return <ProductListTemplate />;
 }

@@ -1,4 +1,4 @@
-import Svg from "@/components/_atoms/svg";
+import Svg from "@/components/atoms/icons/svg";
 import styles from "./page.module.css";
 
 export default function Home() {

@@ -1,4 +1,4 @@
-import LoadingScreen from "@/components/_molecules/loading-screen";
+import LoadingScreen from "@/components/molecules/feedback/loading-screen";
 
 export default function Loading() {
   return <LoadingScreen />;

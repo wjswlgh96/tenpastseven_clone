@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { pretendard } from "../utils/localFonts";
 
 import "./globals.css";
-import TanStackQueryProvider from "../utils/provider/tanstack-query-provider";
-import RecoilProvider from "../utils/provider/recoil-provider";
-import ToastProvider from "@/utils/provider/toast-provider";
+import TanStackQueryProvider from "../utils/providers/tanstack-query-provider";
+import RecoilProvider from "../utils/providers/recoil-provider";
+import ToastProvider from "@/utils/providers/toast-provider";
 
 export const metadata: Metadata = {
   title: "TEN PAST SEVEN - 백오피스",

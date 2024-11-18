@@ -27,11 +27,6 @@ const nextConfig = {
       ],
     });
 
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      "@assets": path.resolve(__dirname, "../shared/assets"),
-    };
-
     config.resolve.roots = [
       path.resolve("public"),
       path.resolve(__dirname, "../shared"),

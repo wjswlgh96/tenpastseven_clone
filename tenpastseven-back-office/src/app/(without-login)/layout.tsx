@@ -1,12 +1,13 @@
 "use client";
 
-import styles from "./layout.module.css";
-
-import SideBar from "@/components/sidebar/sidebar";
-import Content from "@/components/content/content";
-import Header from "@/components/header/header";
-import AuthProvider from "@/utils/provider/auth-provider";
 import { useSearchParams } from "next/navigation";
+
+import SideBar from "@/components/organisms/sidebar/sidebar";
+import ContentContainer from "@/components/atoms/containers/content-container";
+import Header from "@/components/organisms/header/header";
+import AuthProvider from "@/utils/providers/auth-provider";
+
+import styles from "./layout.module.css";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
@@ -16,14 +17,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <div className={styles.container}>
       <AuthProvider />
       {isPopup ? (
-        <>{children}</>
+        children
       ) : (
         <>
           <SideBar />
-          <Content>
+          <ContentContainer>
             <Header />
             {children}
-          </Content>
+          </ContentContainer>
         </>
       )}
     </div>

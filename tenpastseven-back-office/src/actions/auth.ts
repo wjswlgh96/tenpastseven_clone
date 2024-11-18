@@ -42,7 +42,7 @@ export async function login({
     };
   }
 
-  revalidatePath("/", "layout");
+  revalidatePath("/login");
   redirect("/");
 }
 
@@ -54,18 +54,18 @@ export async function logout() {
     return { error: error.message };
   }
 
-  revalidatePath("/", "layout");
+  revalidatePath("/");
   redirect("/login");
 }
 
 export async function signUp() {
   const supabase = await createServerSupabaseClient();
   const { error } = await supabase.auth.signUp({
-    email: "wjswlgh96@naver.com",
-    password: "Dndldka19@",
+    email: "",
+    password: "",
     options: {
       data: {
-        username: "전지호",
+        username: "username",
       },
     },
   });

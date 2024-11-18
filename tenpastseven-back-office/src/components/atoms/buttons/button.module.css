@@ -1,0 +1,25 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: max-content;
+
+  border: none;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+
+  white-space: nowrap;
+  text-decoration: none;
+
+  &:focus-visible {
+    outline: 2px solid #0066ff;
+    outline-offset: 2px;
+  }
+
+  /* 비활성화 상태 */
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}

@@ -1,4 +1,4 @@
-import { SidebarListType } from "@/types/sidebar";
+import { SidebarListType } from "@shared/types";
 
 export const sidebarList: SidebarListType[] = [
   {
