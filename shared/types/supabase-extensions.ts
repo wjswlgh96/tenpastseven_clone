@@ -1,4 +1,4 @@
-import { ProductImage, ProductionOption } from "./product";
+import { ProductImage, ProductOption } from "./product";
 import { Database as GenerateDatabase } from "./supabase";
 
 export type Database = GenerateDatabase & {
@@ -7,7 +7,7 @@ export type Database = GenerateDatabase & {
       products: {
         Row: {
           main_images: ProductImage | null;
-          options: ProductionOption;
+          options: ProductOption;
         };
       };
     };

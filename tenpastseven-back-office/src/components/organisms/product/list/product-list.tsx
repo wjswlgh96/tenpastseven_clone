@@ -54,15 +54,11 @@ export default function ProductList({
       ids: number[];
       data: { is_sale: boolean };
     }) => {
-      const { data: response, error } = await updateSelectedProductsIsSaleState(
+      const { message, success } = await updateSelectedProductsIsSaleState(
         ids,
         data
       );
-      if (error) {
-        toast.error(error);
-        return;
-      }
-      return response;
+      if (success) return message;
     },
     onSuccess: (data) => {
       if (data) {
@@ -75,12 +71,8 @@ export default function ProductList({
 
   const deleteMutation = useMutation({
     mutationFn: async (ids: number[]) => {
-      const { data: response, error } = await deleteSelectedProducts(ids);
-      if (error) {
-        toast.error(error);
-        return;
-      }
-      return response;
+      const { message, success } = await deleteSelectedProducts(ids);
+      if (success) return message;
     },
     onSuccess: (data) => {
       if (data) {
@@ -217,7 +209,7 @@ export default function ProductList({
             />
           ))
         ) : (
-          <div>상품을 추가해보세요!</div>
+          <div className={styles.empty_wrap}>상품 내용이 없습니다.</div>
         )}
       </Card>
     </section>

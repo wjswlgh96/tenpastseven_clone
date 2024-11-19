@@ -1,5 +1,8 @@
 "use server";
 
+import { MessageResponse } from "./type";
+import mapSupabaseError from "@/utils/supabase/errorMessage";
+
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -18,12 +21,14 @@ export async function login({
   });
 
   if (error) {
-    return { error: error.message };
+    const message = mapSupabaseError(error);
+    throw new Error(message);
   }
 
   const userId = data.user.id;
   if (!userId) {
-    return { error: "유저 ID를 찾을 수 없습니다." };
+    const message = "유저 ID를 찾을 수 없습니다.";
+    throw new Error(message);
   }
 
   const { data: userInfo, error: userError } = await supabase
@@ -33,13 +38,14 @@ export async function login({
     .single();
 
   if (userError) {
-    return { error: userError.message };
+    const message = mapSupabaseError(userError);
+    throw new Error(message);
   }
 
   if (!userInfo?.admin) {
-    return {
-      error: "허용된 사용자만 로그인이 가능합니다. 관리자에게 문의하세요.",
-    };
+    const message =
+      "허용된 사용자만 로그인이 가능합니다. 관리자에게 문의하세요.";
+    throw new Error(message);
   }
 
   revalidatePath("/login");
@@ -51,14 +57,15 @@ export async function logout() {
   const { error } = await supabase.auth.signOut();
 
   if (error) {
-    return { error: error.message };
+    const message = mapSupabaseError(error);
+    throw new Error(message);
   }
 
   revalidatePath("/");
   redirect("/login");
 }
 
-export async function signUp() {
+export async function signUp(): Promise<MessageResponse> {
   const supabase = await createServerSupabaseClient();
   const { error } = await supabase.auth.signUp({
     email: "",
@@ -71,8 +78,9 @@ export async function signUp() {
   });
 
   if (error) {
-    return { error: error.message };
+    const message = mapSupabaseError(error);
+    throw new Error(message);
   }
 
-  return { data: "회원가입 성공!!" };
+  return { success: true, message: "회원가입을 축하드립니다." };
 }

@@ -26,12 +26,10 @@ export default function LoginTemplate() {
 
   const signInMutation = useMutation({
     mutationFn: async () => {
-      const { error } = await login(formData);
-
-      if (error) {
-        toast.error(error);
-        return;
-      }
+      await login(formData);
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 
@@ -53,12 +51,14 @@ export default function LoginTemplate() {
         value={formData.email}
         onChange={handleChange}
         type="email"
+        name="email"
         label="이메일"
       />
       <Input
         value={formData.password}
         onChange={handleChange}
         type="password"
+        name="password"
         label="비밀번호"
       />
       <Button

@@ -1,6 +1,5 @@
 import { Database } from "./supabase-extensions";
-
-import { SORT_OPTIONS } from "@/constant/product";
+import { SORT_OPTIONS } from "../../tenpastseven-back-office/src/constant/product";
 
 export type ProductSaleStatus = "all" | "is_sale" | "none_sale" | "sold_out";
 
@@ -14,7 +13,7 @@ export type ProductImage = {
 };
 
 export type SizeType = "S" | "M" | "L";
-export type ProductionOption = Partial<Record<SizeType, number>>;
+export type ProductOption = Partial<Record<SizeType, number>>;
 
 export type ProductType = Database["public"]["Tables"]["products"]["Row"];
 
@@ -22,7 +21,7 @@ export interface ProductEditorState {
   name: string;
   description: string | null;
   price: number;
-  options: ProductionOption;
+  options: ProductOption;
   main_images: ProductImage | null;
   detail_images: string[] | null;
   is_sale: boolean;

@@ -4,7 +4,6 @@ import styles from "./product-list-template.module.css";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { toast } from "react-toastify";
 
 import { getOptionalProducts } from "@/actions/products";
 import { filterProductsBySaleStatus } from "@/utils/functions/product";
@@ -36,18 +35,15 @@ export default function ProductListTemplate() {
       const isAscending = sortOrder.slice(-1) === "a" ? true : false;
       const sortKey = sortOrder.slice(0, -2);
 
-      const { products, error } = await getOptionalProducts({
+      const { data, success } = await getOptionalProducts({
         search,
         sortOrder: sortKey,
         isAscending,
       });
 
-      if (error) {
-        toast.error(error);
-        return;
+      if (success) {
+        return filterProductsBySaleStatus(data, saleStatus);
       }
-
-      return filterProductsBySaleStatus(products, saleStatus);
     },
   });
 

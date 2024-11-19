@@ -13,7 +13,7 @@ import Button from "@/components/atoms/buttons/button";
 import LoadingScreen from "@/components/molecules/feedback/loading-screen";
 
 import { getProduct, upsertProducts } from "@/actions/products";
-import { ProductOptionCheck, ProductType } from "@shared/types";
+import { ProductOptionCheck, ProductType, ProductOption } from "@shared/types";
 
 import styles from "./product-editor-form-section.module.css";
 import { INITIAL_PRODUCT_EDITOR_STATE, SIZES } from "@/constant/product";
@@ -48,16 +48,8 @@ export default function ProductEditorFormSection({ id }: { id?: string }) {
     queryKey: ["product", id],
     queryFn: async () => {
       if (!id) return;
-      const { data, error } = await getProduct(id);
-
-      if (error) {
-        toast.error(error);
-        return;
-      }
-
-      if (data) {
-        handleProductData(data);
-      }
+      const { data, success } = await getProduct(id);
+      if (success) handleProductData(data);
     },
     enabled: !!id,
   });
@@ -67,17 +59,29 @@ export default function ProductEditorFormSection({ id }: { id?: string }) {
   };
 
   const handleOptionChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name } = e.target;
+    const { name, checked } = e.target;
     setOptionChecked((prev) => {
       return {
         ...prev,
-        [name]: !prev[name as keyof ProductOptionCheck],
+        [name]: checked,
       };
     });
-    setFormData((prev) => ({
-      ...prev,
-      options: { ...prev.options, [name]: 0 },
-    }));
+
+    setFormData((prev) => {
+      if (checked) {
+        return {
+          ...prev,
+          options: { ...prev.options, [name]: 0 },
+        };
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { [name as keyof ProductOption]: _, ...newOptions } = prev.options;
+      return {
+        ...prev,
+        options: newOptions,
+      };
+    });
   };
 
   const handleOptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,18 +106,17 @@ export default function ProductEditorFormSection({ id }: { id?: string }) {
     e.preventDefault();
     const newData = id ? { id: Number(id), ...formData } : formData;
 
-    const { data, error } = await upsertProducts({ data: newData });
-    if (error) {
-      toast.error(error);
-      return;
+    const { message, success } = await upsertProducts({ data: newData });
+    if (success) {
+      toast.success(message);
     }
 
-    if (data) {
+    if (message) {
       if (id) {
-        alert("상품 수정 완료");
+        toast.success(message);
         window.close();
       } else {
-        toast.success("상품 등록 완료");
+        toast.success(message);
         router.replace("/product/list");
       }
     }

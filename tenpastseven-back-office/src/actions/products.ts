@@ -1,30 +1,39 @@
 "use server";
 
 import { createServerSupabaseClient } from "@/utils/supabase/server";
+
+import { MessageResponse } from "./type";
 import { ProductType } from "@shared/types";
-import { DefaultResponse } from "./type";
 import {
   formatExistingProductData,
   formatNewProductData,
 } from "@/utils/functions/format";
+import mapSupabaseError from "@/utils/supabase/errorMessage";
 
-interface ProductsResponse {
-  products: ProductType[] | null;
-  error: string | null;
+interface GetAllProductsResponse {
+  success: boolean;
+  data: ProductType[];
 }
-
-export async function getAllProducts(): Promise<ProductsResponse> {
+export async function getAllProducts(): Promise<GetAllProductsResponse> {
   const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase.from("products").select("*");
 
   if (error) {
-    return { products: null, error: error.message };
+    const message = mapSupabaseError(error);
+    throw new Error(message);
   }
 
-  return { products: data, error: null };
+  return {
+    success: true,
+    data,
+  };
 }
 
-export async function getProduct(id: string) {
+interface GetProductResponse {
+  success: boolean;
+  data: ProductType;
+}
+export async function getProduct(id: string): Promise<GetProductResponse> {
   const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase
     .from("products")
@@ -33,10 +42,11 @@ export async function getProduct(id: string) {
     .single();
 
   if (error) {
-    return { data: null, error: error.message };
+    const message = mapSupabaseError(error);
+    throw new Error(message);
   }
 
-  return { data, error: null };
+  return { success: true, data };
 }
 
 export async function getOptionalProducts({
@@ -47,22 +57,27 @@ export async function getOptionalProducts({
   search: string;
   isAscending: boolean;
   sortOrder: string;
-}): Promise<ProductsResponse> {
+}): Promise<GetAllProductsResponse> {
   const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase
     .from("products")
     .select("*")
-    .like("name", `%${search}%`)
+    .ilike("name", `%${search}%`)
     .order(sortOrder, { ascending: isAscending });
 
   if (error) {
-    return { products: null, error: error.message };
+    const message = mapSupabaseError(error);
+    throw new Error(message);
   }
 
-  return { products: data, error: null };
+  return { success: true, data };
 }
 
-export async function upsertProducts({ data }: { data: Partial<ProductType> }) {
+export async function upsertProducts({
+  data,
+}: {
+  data: Partial<ProductType>;
+}): Promise<MessageResponse> {
   const payload = data.id
     ? formatExistingProductData(data)
     : formatNewProductData(data);
@@ -71,16 +86,22 @@ export async function upsertProducts({ data }: { data: Partial<ProductType> }) {
   const { error } = await supabase.from("products").upsert(payload);
 
   if (error) {
-    return { data: null, error: error.message };
+    const message = mapSupabaseError(error);
+    throw new Error(message);
   }
 
-  return { data: "업데이트 성공", error: null };
+  return {
+    success: true,
+    message: data.id
+      ? "상품이 성공적으로 업데이트 되었습니다"
+      : "상품이 성공적으로 생성 되었습니다.",
+  };
 }
 
 export async function updateSelectedProductsIsSaleState(
   idList: number[],
   updateData: Partial<ProductType>
-): Promise<DefaultResponse> {
+): Promise<MessageResponse> {
   const supabase = await createServerSupabaseClient();
   const { error } = await supabase
     .from("products")
@@ -91,27 +112,29 @@ export async function updateSelectedProductsIsSaleState(
     .in("id", idList);
 
   if (error) {
-    return { data: null, error: error.message };
+    const message = mapSupabaseError(error);
+    throw new Error(message);
   }
 
   return {
-    data: "판매상태가 성공적으로 업데이트 되었습니다",
-    error: null,
+    success: true,
+    message: "판매상태가 성공적으로 업데이트 되었습니다",
   };
 }
 
 export async function deleteSelectedProducts(
   idList: number[]
-): Promise<DefaultResponse> {
+): Promise<MessageResponse> {
   const supabase = await createServerSupabaseClient();
   const { error } = await supabase.from("products").delete().in("id", idList);
 
   if (error) {
-    return { data: null, error: error.message };
+    const message = mapSupabaseError(error);
+    throw new Error(message);
   }
 
   return {
-    data: "선택한 상품이 성공적으로 삭제되었습니다",
-    error: null,
+    success: true,
+    message: "선택한 상품이 성공적으로 삭제되었습니다",
   };
 }

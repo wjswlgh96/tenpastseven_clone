@@ -1,4 +1,4 @@
-export interface DefaultResponse {
-  data: string | null;
-  error: string | null;
+export interface MessageResponse {
+  success: boolean;
+  message: string;
 }

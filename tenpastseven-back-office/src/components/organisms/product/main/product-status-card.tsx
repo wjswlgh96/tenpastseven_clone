@@ -10,20 +10,16 @@ import LoadingScreen from "@/components/molecules/feedback/loading-screen";
 
 import { useQuery } from "@tanstack/react-query";
 import { getAllProducts } from "@/actions/products";
-import { toast } from "react-toastify";
 import { PRODUCT_STATUS_CARDS } from "@/constant/product";
 
 export default function ProductStatusCard() {
   const { data, isLoading } = useQuery({
     queryKey: ["products", "length"],
     queryFn: async () => {
-      const { products, error } = await getAllProducts();
-      if (error) {
-        toast.error(error);
-        return;
+      const { data, success } = await getAllProducts();
+      if (success) {
+        return data;
       }
-
-      return products;
     },
   });
 
