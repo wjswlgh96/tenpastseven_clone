@@ -1,31 +1,18 @@
-"use client";
-
 import styles from "./product-status-card.module.css";
 
 import Link from "next/link";
 import Card from "@/components/atoms/containers/card";
 import MenuTitle from "@/components/atoms/typography/menu-title";
 import SubTitle from "@/components/atoms/typography/subtitle";
-import LoadingScreen from "@/components/molecules/feedback/loading-screen";
 
-import { useQuery } from "@tanstack/react-query";
 import { getAllProducts } from "@/actions/products";
 import { PRODUCT_STATUS_CARDS } from "@/constant/product";
 
-export default function ProductStatusCard() {
-  const { data, isLoading } = useQuery({
-    queryKey: ["products", "length"],
-    queryFn: async () => {
-      const { data, success } = await getAllProducts();
-      if (success) {
-        return data;
-      }
-    },
-  });
+export default async function ProductStatusCard() {
+  const { data } = await getAllProducts();
 
   return (
     <>
-      {isLoading && <LoadingScreen />}
       <Card>
         <div className={styles.title_wrap}>
           <MenuTitle>상품 현황</MenuTitle>
