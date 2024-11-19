@@ -35,7 +35,7 @@ export default function ProductListItem({
           clearInterval(interval);
           queryClient.invalidateQueries({ queryKey: ["products"] });
         }
-      }, 100);
+      }, 50);
     }
   };
 
@@ -55,8 +55,8 @@ export default function ProductListItem({
         <div>
           <Image
             src={
-              product.main_images
-                ? product.main_images.small_url
+              product.main_images.main_url.length > 0
+                ? product.main_images.main_url
                 : NONE_IMAGE_URL
             }
             width={80}

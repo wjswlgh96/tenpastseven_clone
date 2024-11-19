@@ -51,7 +51,7 @@ export default function ProductList({
       ids,
       data,
     }: {
-      ids: number[];
+      ids: string[];
       data: { is_sale: boolean };
     }) => {
       const { message, success } = await updateSelectedProductsIsSaleState(
@@ -70,7 +70,7 @@ export default function ProductList({
   });
 
   const deleteMutation = useMutation({
-    mutationFn: async (ids: number[]) => {
+    mutationFn: async (ids: string[]) => {
       const { message, success } = await deleteSelectedProducts(ids);
       if (success) return message;
     },
@@ -89,7 +89,7 @@ export default function ProductList({
       return;
     }
 
-    const ids = checkedItems.map(Number);
+    const ids = checkedItems;
 
     switch (type) {
       case "is_sale_true":
@@ -106,7 +106,7 @@ export default function ProductList({
   };
 
   const handleAllChecked = (isChecked: boolean) => {
-    setCheckedItems(isChecked ? products.map((p) => String(p.id)) : []);
+    setCheckedItems(isChecked ? products.map((p) => p.id) : []);
   };
 
   const handleCheckboxChange = (item: string) => {

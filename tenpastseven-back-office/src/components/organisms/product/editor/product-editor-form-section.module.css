@@ -1,6 +1,7 @@
 .container {
   width: 100%;
   padding: 0 1.5rem;
+  margin-bottom: 3rem;
 }
 
 .form {
@@ -59,11 +60,9 @@
 }
 
 .options_wrap_title {
-  font-size: 14px;
-  font-weight: 500;
   padding-top: 1.5rem;
   margin-bottom: 1rem;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid var(--color-border);
 }
 
 .select_option_wrap {

@@ -14,12 +14,12 @@ export type Database = {
           created_at: string
           description: string | null
           detail_images: string[] | null
-          id: number
+          id: string
           is_sale: boolean
           is_sold_out: boolean
           main_images: Json | null
           name: string
-          options: Json
+          options: Json | null
           price: number
           sale_price: number | null
           updated_at: string | null
@@ -28,13 +28,13 @@ export type Database = {
           created_at?: string
           description?: string | null
           detail_images?: string[] | null
-          id?: number
+          id?: string
           is_sale?: boolean
           is_sold_out?: boolean
           main_images?: Json | null
-          name: string
-          options: Json
-          price: number
+          name?: string
+          options?: Json | null
+          price?: number
           sale_price?: number | null
           updated_at?: string | null
         }
@@ -42,12 +42,12 @@ export type Database = {
           created_at?: string
           description?: string | null
           detail_images?: string[] | null
-          id?: number
+          id?: string
           is_sale?: boolean
           is_sold_out?: boolean
           main_images?: Json | null
           name?: string
-          options?: Json
+          options?: Json | null
           price?: number
           sale_price?: number | null
           updated_at?: string | null

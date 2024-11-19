@@ -10,6 +10,7 @@ import ChevronRight from "@/assets/icons/chevron-right.svg";
 import ProductPage from "@/assets/icons/product-page.svg";
 import MemberPage from "@/assets/icons/member-page.svg";
 import XMark from "@/assets/icons/x-mark.svg";
+import Plus from "@/assets/icons/plus.svg";
 
 interface Props extends React.SVGProps<SVGSVGElement> {
   name: SvgList;
@@ -42,6 +43,9 @@ export default function Svg(props: Props) {
     }
     case "x-mark": {
       return <XMark {...filterProps} />;
+    }
+    case "plus": {
+      return <Plus {...filterProps} />;
     }
 
     default: {

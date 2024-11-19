@@ -6,4 +6,5 @@ export type SvgList =
   | "chevron-right"
   | "product-page"
   | "member-page"
-  | "x-mark";
+  | "x-mark"
+  | "plus";

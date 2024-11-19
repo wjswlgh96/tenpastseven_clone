@@ -1,4 +1,10 @@
-import { ProductEditorState, ProductType, SizeType } from "@shared/types";
+import {
+  ProductEditorState,
+  ProductImage,
+  ProductType,
+  SizeType,
+} from "@shared/types";
+import { v4 } from "uuid";
 
 interface StatusCard {
   title: string;
@@ -79,13 +85,44 @@ export const TABLE_HEADERS = [
 
 export const SIZES: SizeType[] = ["S", "M", "L"] as const;
 export const INITIAL_PRODUCT_EDITOR_STATE: ProductEditorState = {
+  id: v4(),
   name: "",
   description: "",
   price: 0,
   options: {},
-  main_images: null,
+  main_images: {
+    main_url: "",
+    list_url_01: "",
+    list_url_02: "",
+  },
   detail_images: null,
   is_sale: false,
   sale_price: null,
   created_at: new Date().toISOString(),
 };
+
+interface MainImageListItem {
+  name: keyof ProductImage;
+  label: string;
+}
+
+export interface MainImageList {
+  main_url: MainImageListItem;
+  list_url_01: MainImageListItem;
+  list_url_02: MainImageListItem;
+}
+
+export const MAIN_IMAGE_LIST: MainImageList = {
+  main_url: {
+    name: "main_url",
+    label: "메인 이미지",
+  },
+  list_url_01: {
+    name: "list_url_01",
+    label: "리스트 이미지 01",
+  },
+  list_url_02: {
+    name: "list_url_02",
+    label: "리스트 이미지 02",
+  },
+} as const;
