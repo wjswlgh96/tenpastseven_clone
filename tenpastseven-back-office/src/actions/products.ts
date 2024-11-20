@@ -125,13 +125,13 @@ export async function deleteSelectedProducts(
 ): Promise<MessageResponse> {
   const supabase = await createServerSupabaseClient();
 
-  for (const id of idList) {
+  const deleteAllImages = idList.map(async (id) => {
     const directories = [
       `products/${id}/main_images/`,
       `products/${id}/detail_images/`,
     ];
 
-    for (const dir of directories) {
+    const fileDeletePromises = directories.map(async (dir) => {
       const { data: files, error: listError } = await supabase.storage
         .from("tenpastseven")
         .list(dir);
@@ -153,8 +153,12 @@ export async function deleteSelectedProducts(
           throw new Error(message);
         }
       }
-    }
-  }
+    });
+
+    await Promise.all(fileDeletePromises);
+  });
+
+  await Promise.all(deleteAllImages);
 
   const { error } = await supabase.from("products").delete().in("id", idList);
 
@@ -186,39 +190,43 @@ export async function uploadProductMainImage({
   const supabase = await createServerSupabaseClient();
   const urls: ProductMainImages = mainImagesUrl;
 
-  for (const [key, value] of Object.entries(mainImagesFormData)) {
-    const formData = value;
+  const uploadMainImages = Object.entries(mainImagesFormData).map(
+    async ([key, value]) => {
+      const formData = value;
 
-    if (!formData) {
-      continue;
+      if (!formData) {
+        return;
+      }
+
+      const file = formData?.get("file");
+
+      if (!file) {
+        throw new Error("파일을 찾을 수 없습니다");
+      }
+
+      const { error } = await supabase.storage
+        .from("tenpastseven")
+        .upload(`products/${id}/main_images/${key}`, file, {
+          upsert: true,
+          cacheControl: "no-cache",
+        });
+
+      if (error) {
+        const message = mapSupabaseError(error);
+        throw new Error(message);
+      }
+
+      const {
+        data: { publicUrl },
+      } = await supabase.storage
+        .from("tenpastseven")
+        .getPublicUrl(`products/${id}/main_images/${key}`);
+
+      urls[key as keyof ProductMainImages] = `${publicUrl}?t=${Date.now()}`;
     }
+  );
 
-    const file = formData?.get("file");
-
-    if (!file) {
-      throw new Error("파일을 찾을 수 없습니다");
-    }
-
-    const { error } = await supabase.storage
-      .from("tenpastseven")
-      .upload(`products/${id}/main_images/${key}`, value, {
-        upsert: true,
-        cacheControl: "no-cache",
-      });
-
-    if (error) {
-      const message = mapSupabaseError(error);
-      throw new Error(message);
-    }
-
-    const {
-      data: { publicUrl },
-    } = await supabase.storage
-      .from("tenpastseven")
-      .getPublicUrl(`products/${id}/main_images/${key}`);
-
-    urls[key as keyof ProductMainImages] = `${publicUrl}?t=${Date.now()}`;
-  }
+  await Promise.all(uploadMainImages);
 
   return {
     success: true,
@@ -268,18 +276,7 @@ export async function uploadProductDetailImage({
     throw new Error("이미지를 찾을 수 없습니다");
   }
 
-  const { data: existingFiles, error: existingFilesError } =
-    await supabase.storage
-      .from("tenpastseven")
-      .list(`products/${id}/detail_images/`);
-
-  if (existingFilesError) {
-    const message = mapSupabaseError(existingFilesError);
-    throw new Error(message);
-  }
-
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i];
+  const filesPromises = files.map(async (file) => {
     const fileName = v4();
     const { error } = await supabase.storage
       .from("tenpastseven")
@@ -300,7 +297,9 @@ export async function uploadProductDetailImage({
 
     const imageUrl = `${publicUrl}?t=${Date.now()}&name=${fileName}`;
     urls.push(imageUrl);
-  }
+  });
+
+  await Promise.all(filesPromises);
 
   return {
     success: true,
@@ -323,6 +322,7 @@ export const deleteProductDetailImage = async ({
   const supabase = await createServerSupabaseClient();
 
   const targetUrl = url.split("&name=")[1];
+
   const { error } = await supabase.storage
     .from("tenpastseven")
     .remove([`products/${id}/detail_images/${targetUrl}`]);

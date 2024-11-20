@@ -51,7 +51,7 @@ export default function ProductEditorMainImageForm({
     list_url_02: false,
   });
 
-  const deleteMainImageMutation = useMutation({
+  const deleteProductMainImageMutation = useMutation({
     mutationFn: deleteProductMainImage,
     onSuccess: ({ message }, { key }) => {
       toast.success(message, {
@@ -100,6 +100,14 @@ export default function ProductEditorMainImageForm({
     setImagesUrl(mainImages);
   }, [mainImages]);
 
+  useEffect(() => {
+    return () => {
+      Object.values(imagesUrl).forEach((url) => {
+        if (url) URL.revokeObjectURL(url);
+      });
+    };
+  }, [imagesUrl]);
+
   const mainDropzone = useDropzone({
     onDrop: (acceptedFiles) => handleDrop(acceptedFiles, "main_url"),
   });
@@ -146,7 +154,6 @@ export default function ProductEditorMainImageForm({
                       alt={`상품 메인 이미지-${imagesUrl[imageKey]}`}
                       width={150}
                       height={150}
-                      priority
                     />
                   </div>
                   <div className={styles.button_wrap}>
@@ -155,16 +162,21 @@ export default function ProductEditorMainImageForm({
                       className={`${styles.button} ${styles.option_button}`}
                     >
                       <input {...getInputProps()} />
-                      <Button type="button" buttonType="option">
+                      <Button
+                        type="button"
+                        buttonType="option"
+                        aria-label="변경"
+                      >
                         변경
                       </Button>
                     </div>
                     <Button
                       type="button"
                       buttonType="delete"
+                      aria-label="삭제"
                       className={styles.button}
                       onClick={() => {
-                        deleteMainImageMutation.mutate({
+                        deleteProductMainImageMutation.mutate({
                           id,
                           key: imageKey,
                         });

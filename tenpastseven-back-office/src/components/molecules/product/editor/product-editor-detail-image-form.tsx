@@ -60,7 +60,8 @@ export default function ProductEditorDetailImageForm({
 
       files.forEach((file) => {
         formData.append("file", file);
-        urls.push(URL.createObjectURL(file));
+        const newUrl = URL.createObjectURL(file);
+        urls.push(newUrl);
       });
 
       setDetailImagesFormData((prev) => {
@@ -84,6 +85,14 @@ export default function ProductEditorDetailImageForm({
   useEffect(() => {
     setImagesUrls(detailImages);
   }, [detailImages]);
+
+  useEffect(() => {
+    return () => {
+      Object.values(imagesUrls).forEach((url) => {
+        if (url) URL.revokeObjectURL(url);
+      });
+    };
+  }, [imagesUrls]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,

@@ -27,6 +27,7 @@ export default function ProductEditorImageItem(
             {...filterProps}
             className={`${styles.image_item} ${className}`}
             alt={alt}
+            loading="lazy"
           />
           {onDelete && (
             <SvgButton

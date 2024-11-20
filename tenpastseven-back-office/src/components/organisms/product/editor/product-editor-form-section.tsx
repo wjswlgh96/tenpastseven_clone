@@ -30,7 +30,7 @@ import {
 
 import styles from "./product-editor-form-section.module.css";
 import { INITIAL_PRODUCT_EDITOR_STATE, SIZES } from "@/constant/product";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import {
   detailImagesFormDataState,
   mainImagesFormDataState,
@@ -41,8 +41,12 @@ import {
 export default function ProductEditorFormSection({ id }: { id?: string }) {
   const router = useRouter();
 
-  const mainImagesFormData = useRecoilValue(mainImagesFormDataState);
-  const detailImagesFormData = useRecoilValue(detailImagesFormDataState);
+  const [mainImagesFormData, setMainImagesFormData] = useRecoilState(
+    mainImagesFormDataState
+  );
+  const [detailImagesFormData, setDetailImagesFormData] = useRecoilState(
+    detailImagesFormDataState
+  );
 
   const [formData, setFormData] = useState(INITIAL_PRODUCT_EDITOR_STATE);
   const [optionCheck, setOptionChecked] = useState<ProductOptionCheck>({
@@ -180,6 +184,13 @@ export default function ProductEditorFormSection({ id }: { id?: string }) {
 
     const { message, success } = await upsertProducts({ data: newData });
 
+    setMainImagesFormData({
+      main_url: null,
+      list_url_01: null,
+      list_url_02: null,
+    });
+    setDetailImagesFormData(null);
+
     if (success) {
       if (id) {
         alert(message);
@@ -192,6 +203,12 @@ export default function ProductEditorFormSection({ id }: { id?: string }) {
   };
 
   const handleCloseOrBack = () => {
+    setMainImagesFormData({
+      main_url: null,
+      list_url_01: null,
+      list_url_02: null,
+    });
+    setDetailImagesFormData(null);
     if (id) {
       window.close();
     } else {
@@ -208,6 +225,7 @@ export default function ProductEditorFormSection({ id }: { id?: string }) {
           <div className={styles.title_button_wrap}>
             <Button
               type="submit"
+              aria-label={id ? "상품 수정완료" : "상품 등록하기"}
               disabled={
                 uploadMainImageMutation.isPending ||
                 uploadDetailImageMutation.isPending
@@ -219,7 +237,11 @@ export default function ProductEditorFormSection({ id }: { id?: string }) {
             >
               {id ? "상품 수정완료" : "상품 등록하기"}
             </Button>
-            <Button buttonType="delete" onClick={handleCloseOrBack}>
+            <Button
+              buttonType="delete"
+              aria-label={id ? "닫기" : "돌아가기"}
+              onClick={handleCloseOrBack}
+            >
               {id ? "닫기" : "돌아가기"}
             </Button>
           </div>
