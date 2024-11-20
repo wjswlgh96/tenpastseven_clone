@@ -3,9 +3,12 @@
 import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 import { MessageResponse } from "./type";
-import { ProductImage, ProductType } from "@shared/types";
+import { ProductMainImages, ProductType } from "@shared/types";
 import { formatProductData } from "@/utils/functions/format";
 import mapSupabaseError from "@/utils/supabase/errorMessage";
+import { MainImagesFormData } from "@/utils/recoil/atoms";
+
+import { v4 } from "uuid";
 
 interface GetAllProductsResponse {
   success: boolean;
@@ -121,6 +124,38 @@ export async function deleteSelectedProducts(
   idList: string[]
 ): Promise<MessageResponse> {
   const supabase = await createServerSupabaseClient();
+
+  for (const id of idList) {
+    const directories = [
+      `products/${id}/main_images/`,
+      `products/${id}/detail_images/`,
+    ];
+
+    for (const dir of directories) {
+      const { data: files, error: listError } = await supabase.storage
+        .from("tenpastseven")
+        .list(dir);
+
+      if (listError) {
+        const message = mapSupabaseError(listError);
+        throw new Error(message);
+      }
+
+      if (files && files.length > 0) {
+        const filesToDelete = files.map((file) => `${dir}${file.name}`);
+
+        const { error: deleteError } = await supabase.storage
+          .from("tenpastseven")
+          .remove(filesToDelete);
+
+        if (deleteError) {
+          const message = mapSupabaseError(deleteError);
+          throw new Error(message);
+        }
+      }
+    }
+  }
+
   const { error } = await supabase.from("products").delete().in("id", idList);
 
   if (error) {
@@ -136,50 +171,170 @@ export async function deleteSelectedProducts(
 
 interface UploadProductMainImageResponse extends MessageResponse {
   data: {
-    url: string;
+    urls: ProductMainImages;
   };
 }
 export async function uploadProductMainImage({
   id,
+  mainImagesUrl,
+  mainImagesFormData,
+}: {
+  id: string;
+  mainImagesUrl: ProductMainImages;
+  mainImagesFormData: MainImagesFormData;
+}): Promise<UploadProductMainImageResponse> {
+  const supabase = await createServerSupabaseClient();
+  const urls: ProductMainImages = mainImagesUrl;
+
+  for (const [key, value] of Object.entries(mainImagesFormData)) {
+    const formData = value;
+
+    if (!formData) {
+      continue;
+    }
+
+    const file = formData?.get("file");
+
+    if (!file) {
+      throw new Error("파일을 찾을 수 없습니다");
+    }
+
+    const { error } = await supabase.storage
+      .from("tenpastseven")
+      .upload(`products/${id}/main_images/${key}`, value, {
+        upsert: true,
+        cacheControl: "no-cache",
+      });
+
+    if (error) {
+      const message = mapSupabaseError(error);
+      throw new Error(message);
+    }
+
+    const {
+      data: { publicUrl },
+    } = await supabase.storage
+      .from("tenpastseven")
+      .getPublicUrl(`products/${id}/main_images/${key}`);
+
+    urls[key as keyof ProductMainImages] = `${publicUrl}?t=${Date.now()}`;
+  }
+
+  return {
+    success: true,
+    message: "이미지가 성공적으로 업로드 되었습니다",
+    data: {
+      urls,
+    },
+  };
+}
+
+export const deleteProductMainImage = async ({
+  id,
   key,
+}: {
+  id: string;
+  key: keyof ProductMainImages;
+}) => {
+  const supabase = await createServerSupabaseClient();
+  const { error: deleteError } = await supabase.storage
+    .from("tenpastseven")
+    .remove([`products/${id}/main_images/${key}`]);
+
+  if (deleteError) {
+    const message = mapSupabaseError(deleteError);
+    throw new Error(message);
+  }
+
+  return {
+    success: true,
+    message: "이미지가 성공적으로 삭제되었습니다",
+    key,
+  };
+};
+
+export async function uploadProductDetailImage({
+  id,
   formData,
 }: {
   id: string;
-  key: keyof ProductImage;
   formData: FormData;
-}): Promise<UploadProductMainImageResponse> {
+}) {
   const supabase = await createServerSupabaseClient();
-  const file = formData.get("file") as File;
+  const files = formData.getAll("file") as File[];
+  const urls: string[] = [];
 
-  if (!file) {
+  if (!files) {
     throw new Error("이미지를 찾을 수 없습니다");
   }
 
+  const { data: existingFiles, error: existingFilesError } =
+    await supabase.storage
+      .from("tenpastseven")
+      .list(`products/${id}/detail_images/`);
+
+  if (existingFilesError) {
+    const message = mapSupabaseError(existingFilesError);
+    throw new Error(message);
+  }
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const fileName = v4();
+    const { error } = await supabase.storage
+      .from("tenpastseven")
+      .upload(`products/${id}/detail_images/${fileName}`, file, {
+        cacheControl: "no-cache",
+      });
+
+    if (error) {
+      const message = mapSupabaseError(error);
+      throw new Error(message);
+    }
+
+    const {
+      data: { publicUrl },
+    } = await supabase.storage
+      .from("tenpastseven")
+      .getPublicUrl(`products/${id}/detail_images/${fileName}`);
+
+    const imageUrl = `${publicUrl}?t=${Date.now()}&name=${fileName}`;
+    urls.push(imageUrl);
+  }
+
+  return {
+    success: true,
+    message: "이미지가 성공적으로 업로드 되었습니다",
+    data: {
+      urls,
+    },
+  };
+}
+
+export const deleteProductDetailImage = async ({
+  id,
+  url,
+  index,
+}: {
+  id: string;
+  url: string;
+  index: number;
+}) => {
+  const supabase = await createServerSupabaseClient();
+
+  const targetUrl = url.split("&name=")[1];
   const { error } = await supabase.storage
     .from("tenpastseven")
-    .upload(`products/${id}/main_images/${key}`, file, {
-      upsert: true,
-      cacheControl: "no-cache",
-    });
+    .remove([`products/${id}/detail_images/${targetUrl}`]);
 
   if (error) {
     const message = mapSupabaseError(error);
     throw new Error(message);
   }
 
-  const {
-    data: { publicUrl },
-  } = await supabase.storage
-    .from("tenpastseven")
-    .getPublicUrl(`products/${id}/main_images/${key}`);
-
-  const imageUrl = `${publicUrl}?t=${Date.now()}`;
-
   return {
     success: true,
-    message: "이미지가 성공적으로 업로드 되었습니다",
-    data: {
-      url: imageUrl,
-    },
+    message: "이미지가 성공적으로 삭제되었습니다",
+    index,
   };
-}
+};

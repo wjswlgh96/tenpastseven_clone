@@ -6,7 +6,7 @@ export type ProductSaleStatus = "all" | "is_sale" | "none_sale" | "sold_out";
 export type SortOrderType = keyof typeof SORT_OPTIONS;
 export type ButtonActionType = "is_sale_true" | "is_sale_false" | "";
 
-export type ProductImage = {
+export type ProductMainImages = {
   main_url: string;
   list_url_01: string;
   list_url_02: string;
@@ -23,7 +23,7 @@ export interface ProductEditorState {
   description: string | null;
   price: number;
   options: ProductOption;
-  main_images: ProductImage;
+  main_images: ProductMainImages;
   detail_images: string[] | null;
   is_sale: boolean;
   sale_price: number | null;
