@@ -193,7 +193,6 @@ export async function uploadProductMainImage({
   const uploadMainImages = Object.entries(mainImagesFormData).map(
     async ([key, value]) => {
       const formData = value;
-      console.log("formData", formData);
 
       if (!formData) {
         return;
