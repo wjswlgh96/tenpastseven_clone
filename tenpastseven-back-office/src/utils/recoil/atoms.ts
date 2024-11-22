@@ -25,7 +25,6 @@ export const mainImagesFormDataState = atom<MainImagesFormData>({
   },
 });
 
-<<<<<<< HEAD
 export interface DetailImagesData {
   image_id: string;
   image_url: string;
@@ -35,9 +34,4 @@ export interface DetailImagesData {
 export const detailImagesDataState = atom<DetailImagesData[]>({
   key: "detailImagesDataState",
   default: [],
-=======
-export const detailImagesFormDataState = atom<FormData | null>({
-  key: "detailImagesFormDataState",
-  default: null,
->>>>>>> 1f0373c666f00ca74a3efd57466311724d8ebe1b
 });
