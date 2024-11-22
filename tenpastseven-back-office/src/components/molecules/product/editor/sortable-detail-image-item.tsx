@@ -7,6 +7,8 @@ import { CSS } from "@dnd-kit/utilities";
 
 import ProductEditorImageItem from "./product-editor-image-item";
 
+import styles from "./sortable-detail-image-item.module.css";
+
 interface SortableDetailImageItemProps {
   id: string;
   src: string;
@@ -55,7 +57,11 @@ export default function SortableDetailImageItem({
   };
 
   return (
-    <div ref={setNodeRef} style={style}>
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={styles.sortable_detail_image_item_wrap}
+    >
       <div {...attributes} {...listeners}>
         <ProductEditorImageItem
           src={src}

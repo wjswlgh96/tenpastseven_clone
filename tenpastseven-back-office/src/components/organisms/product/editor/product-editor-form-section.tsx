@@ -155,6 +155,11 @@ export default function ProductEditorFormSection({ id }: { id?: string }) {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (detailImagesData.length >= 20) {
+      toast.error("상세이미지는 최대 20개까지 등록할 수 있습니다.");
+      return;
+    }
+
     const {
       success: uploadMainImageSuccess,
       data: { urls },

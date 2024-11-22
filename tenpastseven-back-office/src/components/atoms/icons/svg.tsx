@@ -11,6 +11,7 @@ import ProductPage from "@/assets/icons/product-page.svg";
 import MemberPage from "@/assets/icons/member-page.svg";
 import XMark from "@/assets/icons/x-mark.svg";
 import Plus from "@/assets/icons/plus.svg";
+import Search from "@/assets/icons/search.svg";
 
 interface Props extends React.SVGProps<SVGSVGElement> {
   name: SvgList;
@@ -46,6 +47,9 @@ export default function Svg(props: Props) {
     }
     case "plus": {
       return <Plus {...filterProps} />;
+    }
+    case "search": {
+      return <Search {...filterProps} />;
     }
 
     default: {

@@ -7,4 +7,5 @@ export type SvgList =
   | "product-page"
   | "member-page"
   | "x-mark"
-  | "plus";
+  | "plus"
+  | "search";

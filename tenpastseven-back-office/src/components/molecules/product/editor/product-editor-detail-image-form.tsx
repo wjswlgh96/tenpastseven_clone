@@ -210,24 +210,23 @@ export default function ProductEditorDetailImageForm({
                 )}
               </SortableContext>
             </DndContext>
-          </div>
-
-          <div {...getRootProps()} className={styles.image_list_input_wrap}>
-            <div>
-              <input {...getInputProps()} />
-              <p className={styles.input_p}>
-                {isDragActive ? (
-                  "이미지를 놓으시면 등록됩니다"
-                ) : (
-                  <>
-                    이미지를 드래그
-                    <br />
-                    하거나 클릭하시면
-                    <br />
-                    이미지가 추가됩니다
-                  </>
-                )}
-              </p>
+            <div {...getRootProps()} className={styles.image_list_input_wrap}>
+              <div>
+                <input {...getInputProps()} />
+                <p className={styles.input_p}>
+                  {isDragActive ? (
+                    "이미지를 놓으시면 등록됩니다"
+                  ) : (
+                    <>
+                      이미지를 드래그
+                      <br />
+                      하거나 클릭하시면
+                      <br />
+                      이미지가 추가됩니다
+                    </>
+                  )}
+                </p>
+              </div>
             </div>
           </div>
         </div>

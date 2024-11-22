@@ -24,7 +24,9 @@
 }
 
 .image_list_images_wrap {
-  display: flex;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   gap: 1rem;
 }
 

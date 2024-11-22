@@ -8,7 +8,6 @@ import styles from "./svg-button.module.css";
 interface Props {
   name: SvgList;
   onClick: MouseEventHandler<HTMLDivElement>;
-
   className?: string | undefined;
   style?: MotionStyle;
 }
