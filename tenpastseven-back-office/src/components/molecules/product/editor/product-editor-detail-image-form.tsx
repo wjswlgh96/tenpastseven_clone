@@ -18,7 +18,10 @@ import styles from "./product-editor-detail-image-form.module.css";
 
 import { useRecoilState } from "recoil";
 import { detailImagesDataState } from "@/utils/recoil/atoms";
-import { deleteProductDetailImage } from "@/actions/products";
+import {
+  deleteAllProductDetailImages,
+  deleteProductDetailImage,
+} from "@/actions/products";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import {
@@ -36,6 +39,8 @@ import {
   SortableContext,
 } from "@dnd-kit/sortable";
 import Spinner from "@/components/atoms/feedback/spinner";
+import Button from "@/components/atoms/buttons/button";
+import LoadingScreen from "../../feedback/loading-screen";
 
 interface ProductEditorDetailImageFormProps {
   id: string;
@@ -70,7 +75,7 @@ export default function ProductEditorDetailImageForm({
     );
   }, [detailImagesData]);
 
-  const deleteMainImageMutation = useMutation({
+  const deleteDetailImageMutation = useMutation({
     mutationFn: deleteProductDetailImage,
     onSuccess: ({ message, index }) => {
       toast.success(message, {
@@ -91,6 +96,22 @@ export default function ProductEditorDetailImageForm({
       setFormData((prev) => ({
         ...prev,
         detail_images: newDetailImagesData.map((data) => data.image_url),
+      }));
+    },
+  });
+
+  const deleteAllDetailImageMutation = useMutation({
+    mutationFn: deleteAllProductDetailImages,
+    onSuccess: ({ message }) => {
+      toast.success(message, {
+        position: "bottom-right",
+      });
+
+      setDetailImagesData([]);
+
+      setFormData((prev) => ({
+        ...prev,
+        detail_images: [],
       }));
     },
   });
@@ -153,12 +174,41 @@ export default function ProductEditorDetailImageForm({
       return;
     }
 
-    deleteMainImageMutation.mutate({
+    deleteDetailImageMutation.mutate({
       id,
       url,
       index,
     });
   };
+
+  const handleAllDelete = () => {
+    if (detailImagesData.length === 0) {
+      toast.error("디테일 이미지가 없습니다");
+      return;
+    }
+
+    if (window.confirm("정말 디테일 이미지를 전체 삭제하시겠습니까?")) {
+      if (
+        detailImagesData.every((data) => data.image_url.startsWith("blob:"))
+      ) {
+        setDetailImagesData([]);
+        setFormData((prev) => ({
+          ...prev,
+          detail_images: [],
+        }));
+      } else {
+        deleteAllDetailImageMutation.mutate({ id });
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (detailImagesData) {
+      detailImagesData.forEach((data) => {
+        URL.revokeObjectURL(data.image_url);
+      });
+    }
+  }, [detailImagesData]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -167,9 +217,15 @@ export default function ProductEditorDetailImageForm({
 
   return (
     <div className={styles.image_wrap}>
-      <SubTitle className={styles.image_wrap_subtitle}>
-        상품 디테일 페이지 이미지 등록
-      </SubTitle>
+      {deleteAllDetailImageMutation.isPending && <LoadingScreen />}
+      <div className={styles.image_wrap_header}>
+        <SubTitle className={styles.image_wrap_subtitle}>
+          상품 디테일 페이지 이미지 등록
+        </SubTitle>
+        <Button type="button" onClick={handleAllDelete} buttonType="delete">
+          디테일 이미지 전체삭제
+        </Button>
+      </div>
       {detailImagesData.length > 0 ? (
         <div className={styles.image_list_wrap}>
           <div className={styles.image_list_images_wrap}>

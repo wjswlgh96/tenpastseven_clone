@@ -349,3 +349,35 @@ export const deleteProductDetailImage = async ({
     index,
   };
 };
+
+export const deleteAllProductDetailImages = async ({ id }: { id: string }) => {
+  const supabase = await createServerSupabaseClient();
+  const path = `products/${id}/detail_images/`;
+
+  const { data: files, error: listError } = await supabase.storage
+    .from("tenpastseven")
+    .list(path);
+
+  if (listError) {
+    const message = mapSupabaseError(listError);
+    throw new Error(message);
+  }
+
+  if (files && files.length > 0) {
+    const filesToDelete = files.map((file) => `${path}${file.name}`);
+
+    const { error: deleteError } = await supabase.storage
+      .from("tenpastseven")
+      .remove(filesToDelete);
+
+    if (deleteError) {
+      const message = mapSupabaseError(deleteError);
+      throw new Error(message);
+    }
+  }
+
+  return {
+    success: true,
+    message: "이미지가 성공적으로 삭제되었습니다",
+  };
+};

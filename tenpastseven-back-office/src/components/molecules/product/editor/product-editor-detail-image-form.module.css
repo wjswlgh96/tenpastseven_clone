@@ -4,6 +4,12 @@
   gap: 10px;
 }
 
+.image_wrap_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .image_wrap_subtitle {
   margin-bottom: 1.5rem;
 }
