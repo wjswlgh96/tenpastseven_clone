@@ -1,5 +1,7 @@
 "use client";
 
+import React from "react";
+
 import { ProductType } from "@shared/types";
 import styles from "./product-list-item.module.css";
 import { formatPrice } from "@/utils/functions/format";
@@ -14,7 +16,7 @@ interface ProductListItemProps {
   index: number;
 }
 
-export default function ProductListItem({
+export default React.memo(function ProductListItem({
   isChecked,
   handleCheckboxChange,
   product,
@@ -61,8 +63,10 @@ export default function ProductListItem({
             }
             width={80}
             height={80}
+            sizes={"100vw"}
             className={styles.info_image}
             alt={product.name}
+            priority
           />
         </div>
         <div>
@@ -88,4 +92,4 @@ export default function ProductListItem({
       <div>{product.is_sold_out ? "품절됨" : `${totalStock} 개`}</div>
     </div>
   );
-}
+});

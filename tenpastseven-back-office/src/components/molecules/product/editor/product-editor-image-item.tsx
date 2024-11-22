@@ -47,6 +47,7 @@ export default function ProductEditorImageItem(
         className={`${styles.image_item} ${className}`}
         src={src}
         alt={alt}
+        sizes={"100vw"}
         priority
       />
       {onDelete && isHover && (

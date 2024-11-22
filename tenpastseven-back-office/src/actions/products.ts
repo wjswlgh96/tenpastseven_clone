@@ -208,7 +208,6 @@ export async function uploadProductMainImage({
         .from("tenpastseven")
         .upload(`products/${id}/main_images/${key}`, file, {
           upsert: true,
-          cacheControl: "no-cache",
         });
 
       if (error) {

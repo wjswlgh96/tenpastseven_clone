@@ -1,3 +1,4 @@
+import React from "react";
 import {
   AnimateLayoutChanges,
   defaultAnimateLayoutChanges,
@@ -29,7 +30,7 @@ function animateLayoutChanges(args: Parameters<AnimateLayoutChanges>[0]) {
   return true;
 }
 
-export default function SortableDetailImageItem({
+export default React.memo(function SortableDetailImageItem({
   id,
   src,
   alt,
@@ -74,4 +75,4 @@ export default function SortableDetailImageItem({
       </div>
     </div>
   );
-}
+});

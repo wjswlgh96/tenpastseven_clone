@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { SvgList } from "@shared/types";
 
 import Logo from "@/assets/icons/logo.svg";
@@ -17,7 +18,7 @@ interface Props extends React.SVGProps<SVGSVGElement> {
   name: SvgList;
 }
 
-export default function Svg(props: Props) {
+export default React.memo(function Svg(props: Props) {
   const { name, ...filterProps } = props;
 
   switch (name) {
@@ -56,4 +57,4 @@ export default function Svg(props: Props) {
       return <div>존재하지 않는 SVG입니다. name을 확인해주세요</div>;
     }
   }
-}
+});
