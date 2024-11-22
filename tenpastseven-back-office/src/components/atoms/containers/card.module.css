@@ -1,0 +1,10 @@
+.card {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 15px;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1), -1px -1px 1px rgba(0, 0, 0, 0.05);
+}
+
+.none_shadow {
+  box-shadow: none !important;
+}

@@ -1,0 +1,36 @@
+.card_grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.title_wrap {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.list_link {
+  font-size: 14px;
+  color: rgb(23, 121, 192);
+  text-decoration: underline rgb(23, 121, 192);
+}
+
+.grid_card_list {
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+.link_text {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.quantity_wrap {
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+}

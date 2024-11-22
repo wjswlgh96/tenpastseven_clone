@@ -1,0 +1,24 @@
+.search_wrap {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 30px;
+}
+
+.title {
+  min-width: max-content;
+}
+
+.search_button {
+  min-width: max-content;
+}
+
+.input_container {
+  width: 100%;
+  max-width: 400px;
+}
+
+.search_input {
+  width: 100% !important;
+  height: 35px !important;
+}

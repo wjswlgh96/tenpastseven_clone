@@ -1,0 +1,8 @@
+.menu_title {
+  min-width: max-content;
+
+  margin: 1rem 0;
+  font-size: 18px;
+
+  font-weight: bold;
+}
