@@ -49,28 +49,46 @@ export async function getProduct(id: string): Promise<GetProductResponse> {
   return { success: true, data };
 }
 
+interface GetOptionalProductsResponse {
+  success: boolean;
+  data: ProductType[];
+  nextPage: number | undefined;
+  hasMore: boolean;
+}
+
 export async function getOptionalProducts({
   search,
   isAscending,
   sortOrder,
+  pageParam,
 }: {
   search: string;
   isAscending: boolean;
   sortOrder: string;
-}): Promise<GetAllProductsResponse> {
+  pageParam: number;
+}): Promise<GetOptionalProductsResponse> {
   const supabase = await createServerSupabaseClient();
-  const { data, error } = await supabase
-    .from("products")
-    .select("*")
-    .ilike("name", `%${search}%`)
-    .order(sortOrder, { ascending: isAscending });
+  const limit = 10;
+  const offset = pageParam * limit;
 
-  if (error) {
+  const { data, error, count } = await supabase
+    .from("products")
+    .select("*", { count: "exact" })
+    .ilike("name", `%${search}%`)
+    .order(sortOrder, { ascending: isAscending })
+    .range(offset, offset + limit - 1);
+
+  if (error || count === null) {
     const message = mapSupabaseError(error);
     throw new Error(message);
   }
 
-  return { success: true, data };
+  return {
+    success: true,
+    data,
+    nextPage: offset + limit < count ? pageParam + 1 : undefined,
+    hasMore: offset + limit < count,
+  };
 }
 
 export async function upsertProducts({
@@ -88,9 +106,11 @@ export async function upsertProducts({
     throw new Error(message);
   }
 
+  console.log(data.updated_at);
+
   return {
     success: true,
-    message: data.id
+    message: data.updated_at
       ? "상품이 성공적으로 업데이트 되었습니다"
       : "상품이 성공적으로 생성 되었습니다.",
   };

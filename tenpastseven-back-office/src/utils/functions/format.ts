@@ -16,7 +16,7 @@ export function formatProductData(data: Partial<ProductType>): ProductType {
     name: data.name ?? "",
     price: data.price ?? 0,
     description: data.description ?? null,
-    detail_images: data.detail_images ?? null,
+    detail_images: data.detail_images ?? [],
     is_sale: data.is_sale ?? false,
     is_sold_out: is_sold_out,
     main_images: data.main_images ?? {

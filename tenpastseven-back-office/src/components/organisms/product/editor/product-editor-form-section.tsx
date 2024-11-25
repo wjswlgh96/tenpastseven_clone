@@ -38,8 +38,6 @@ import {
   mainImagesFormDataState,
 } from "@/utils/recoil/atoms";
 
-// name, description, options, main_images, detail_images, 판매상태, 판매가
-
 export default function ProductEditorFormSection({ id }: { id?: string }) {
   const router = useRouter();
 
@@ -177,13 +175,14 @@ export default function ProductEditorFormSection({ id }: { id?: string }) {
 
     const newData = id
       ? {
-          updated_at: new Date().toISOString(),
           ...formData,
+          updated_at: new Date().toISOString(),
           main_images: uploadMainImageSuccess ? urls : formData.main_images,
           detail_images: detailSuccess ? data.urls : formData.detail_images,
         }
       : {
           ...formData,
+          id: v4(),
           main_images: uploadMainImageSuccess ? urls : formData.main_images,
           detail_images: data.urls,
         };

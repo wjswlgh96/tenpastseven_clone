@@ -1,9 +1,10 @@
 "use client";
 
 import styles from "./product-list-template.module.css";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInView } from "react-intersection-observer";
 
 import { getOptionalProducts } from "@/actions/products";
 import { filterProductsBySaleStatus } from "@/utils/functions/product";
@@ -14,10 +15,15 @@ import LoadingScreen from "@/components/molecules/feedback/loading-screen";
 import ProductQuantity from "@/components/organisms/product/list/product-quantity";
 import ProductSearch from "@/components/organisms/product/list/product-search";
 import ProductList from "@/components/organisms/product/list/product-list";
+import Spinner from "@/components/atoms/feedback/spinner";
 
 export default function ProductListTemplate() {
   const searchParams = useSearchParams();
   const getQ = searchParams.get("q") as ProductSaleStatus;
+
+  const { ref, inView } = useInView({
+    threshold: 0,
+  });
 
   const [search, setSearch] = useState("");
   const [saleStatus, setSaleStatus] = useState<ProductSaleStatus>(
@@ -29,23 +35,42 @@ export default function ProductListTemplate() {
     data: products,
     isLoading,
     refetch,
-  } = useQuery({
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
     queryKey: ["products", { sortOrder, saleStatus }],
-    queryFn: async () => {
-      const isAscending = sortOrder.slice(-1) === "a" ? true : false;
+    queryFn: async ({ pageParam }: { pageParam: number }) => {
+      const isAscending = sortOrder.slice(-1) === "a";
       const sortKey = sortOrder.slice(0, -2);
 
-      const { data, success } = await getOptionalProducts({
+      const { data, success, nextPage, hasMore } = await getOptionalProducts({
         search,
-        sortOrder: sortKey,
         isAscending,
+        sortOrder: sortKey,
+        pageParam,
       });
 
-      if (success) {
-        return filterProductsBySaleStatus(data, saleStatus);
+      if (!success) {
+        throw new Error("데이터를 가져오는 중 오류가 발생했습니다.");
       }
+
+      return {
+        data: filterProductsBySaleStatus(data, saleStatus),
+        nextPage,
+        hasMore,
+      };
     },
+    getNextPageParam: (lastPage) =>
+      lastPage.nextPage ? lastPage.nextPage : undefined,
+    initialPageParam: 0,
   });
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage && !isLoading) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, fetchNextPage, isLoading, isFetchingNextPage]);
 
   const onChangeSearch = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -74,12 +99,13 @@ export default function ProductListTemplate() {
             isLoading={isLoading}
           />
           <ProductList
-            products={products}
+            products={products?.pages.flatMap((page) => page.data ?? []) ?? []}
             sortOrder={sortOrder}
             setSortOrder={setSortOrder}
             saleStatus={saleStatus}
             setSaleStatus={setSaleStatus}
           />
+          {isFetchingNextPage ? <Spinner size="50px" /> : <div ref={ref} />}
         </div>
       )}
     </ProductContainer>
